@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Registration</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h2>User Registration Form</h2>
+  <form id="registrationForm">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" required><br>
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br>
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username" required><br>
+    <label for="phone">Phone:</label><br>
+    <input type="text" id="phone" name="phone" required><br><br>
+    <input type="submit" value="Register">
+  </form>
+
+  <h2>User List</h2>
+  <ul id="userList"></ul>
+
+  <script>
+    var enteredUser;
+    $(document).ready(function(){
+      // Function to handle form submission
+      $('#registrationForm').submit(function(event){
+        event.preventDefault();
+        var userData = {
+          name: $('#name').val(),
+          email: $('#email').val(),
+          username: $('#username').val(),
+          phone: $('#phone').val()
+        };
+        
+        // Save user data to localStorage
+        saveUserData(userData);
+        
+        // AJAX POST request to push data to API
+        $.ajax({
+          type: 'POST',
+          url: 'https://jsonplaceholder.typicode.com/users',
+          data: userData,
+          success: function(response){
+            console.log('Registration successful:', response);
+            // Fetch updated user list after successful registration
+            fetchUserList();
+          },
+          error: function(xhr, status, error){
+            console.error('Registration failed:', error);
+          }
+        });
+      });
+
+      // Function to fetch user list from API
+      function fetchUserList() {
+        $.ajax({
+          type: 'GET',
+          url: 'https://jsonplaceholder.typicode.com/users',
+          success: function(users){
+            $('#userList').empty(); // Clear the existing list
+            users.forEach(function(user){
+              $('#userList').append('<li>' + user.name + ' - ' + user.email + '</li>');
+            });
+            enteredUser = JSON.parse(localStorage.getItem('users')) || [];
+            enteredUser.forEach(function(user){
+              $('#userList').append('<li>' + user.name + ' - ' + user.email + '</li>');
+            });
+
+          },
+          error: function(xhr, status, error){
+            console.error('Failed to fetch user list:', error);
+          }
+        });
+      }
+
+      // Function to save user data to localStorage
+      function saveUserData(userData) {
+        enteredUser = JSON.parse(localStorage.getItem('users')) || [];
+        enteredUser.push(userData);
+        localStorage.setItem('users', JSON.stringify(enteredUser));
+      }
+
+      // Initial fetch of user list on page load
+      fetchUserList();
+    });
+  </script>
+</body>
+</html>

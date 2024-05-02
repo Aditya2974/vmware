@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Tables</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+        }
+        table {
+            border-collapse: collapse;
+            margin-left: 10px;
+            margin-bottom: 20px;
+            font-size: 16px; /* Adjust font size */
+            border: 2px solid black; /* Add border to entire table */
+        }
+        th, td {
+            padding: 10px; /* Add padding to cells */
+            border: 1px solid black; /* Add border to cells */
+            text-align: center; /* Center-align text */
+        }
+
+        #tableContainer {
+            align-self: center;
+            background-color: aliceblue;
+            align-content: center;
+            padding: 20px; /* Add padding to container */
+        }
+        #container {
+            text-align: center; /* Center-align content */
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="container">
+            <label for="table1">Input1</label>
+            <input type="text" id="table1" placeholder="Enter first input">
+        </div>
+        <div class="container">
+            <label for="table2">Input2</label>
+            <input type="text" id="table2" placeholder="Enter second input">
+        </div>
+        <div>
+            <button onclick="generateTables()">Submit</button>
+        </div>
+        <br>
+        <div id="tableContainer">
+    
+        </div>
+    </div>
+    
+</body>
+<script>
+
+    function generateTables(){
+        const [row1,col1,value1] = document.getElementById('table1').value.split('#').map(Number);
+        console.log(row1,col1,value1);
+        const [row2,col2,value2] = document.getElementById('table2').value.split('#').map(Number);
+        console.log(row2,col2,value2);
+
+        if(row1 === row2 && col1 === col2){
+            
+            alert('Will generate table now!');
+
+            const table1 = generateTable(row1,col1,value1);
+            const table2 = generateTable(row2,col2,value2);
+            const table3 = genThirdTable(row1,col1,value1,value2);
+
+            document.getElementById("tableContainer").innerHTML = "";
+            document.getElementById("tableContainer").appendChild(table1);
+            document.getElementById("tableContainer").appendChild(table2);
+            document.getElementById("tableContainer").appendChild(table3);
+
+        }else{
+            alert('Generation not Possible');
+        }
+    }
+
+    function generateTable(rows,cols,value){
+
+        const table = document.createElement('table');
+
+        for(let i = 0 ; i < rows ; i++){
+            const row = table.insertRow();
+            for(let j = 0; j < cols;j++){
+                const cell = row.insertCell();
+
+                // Actual number
+                const num = (i+1) * (j + value);
+                cell.textContent = num;
+            }
+        }
+
+        return table;
+    }
+
+    function genThirdTable(row,col,value1,value2){
+        const table = document.createElement('table');
+        for(let i = 0 ; i < row;i++){
+            const row = table.insertRow();
+            for(let j = 0; j < col;j++){
+                const cell = row.insertCell();
+
+                const num1 = (i+1)*(j + value1);
+                const num2 = (i+1)*(j + value2);
+
+                if(num1 === num2){
+                    cell.textContent = num1;
+                }else{
+                    const num = num1* num2;
+                    cell.textContent = num;
+                }
+            }
+        }
+
+        return table
+    }
+    
+</script>
+</html>

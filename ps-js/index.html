@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage</title>
+</head>
+<body>
+    <a href="login.html">Login</a>
+    <br><br>
+    <h1>Registration Form</h1>
+    <form class="form">
+        <div class="form-control">
+            <label for="name"></label>
+            <input type="text" id="name" placeholder="Enter your name">
+        </div>
+        <div class="form-control">
+            <label for="email"></label>
+            <input type="text" id="email" placeholder="Enter your email">
+        </div>
+        <div class="form-control">
+            <label for="password"></label>
+            <input type="password" id="password" placeholder="Enter your password">
+        </div>
+        <div class="form-control">
+            <button type="button" onclick="SaveData()">Submit</button>
+        </div>
+    </form>
+</body>
+<script>
+    function SaveData(){
+
+        let name,email,password;
+
+        name = document.getElementById('name').value;
+        email = document.getElementById('email').value;
+        password = document.getElementById('password').value;
+
+        let user_record = new Array();
+
+        user_record = JSON.parse(localStorage.getItem("users")) ? JSON.parse(localStorage.getItem("users")):[]
+
+        if(user_record.some(v =>{
+            v.email == email
+        })){
+            alert('Duplicate Data found');
+        }else{
+            user_record.push({
+                "name": name,
+                "email" : email,
+                "password": password
+            });
+            localStorage.setItem("users",JSON.stringify(user_record));
+            window.location.href = "login.html";
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login Form</h1>
+    <form class="form">
+        <div class="form-control">
+            <label for="email"></label>
+            <input type="text" id="email" placeholder="Enter your email">
+        </div>
+        <div class="form-control">
+            <label for="password"></label>
+            <input type="password" id="password" placeholder="Enter your password">
+        </div>
+        <div class="form-control">
+            <button type="button" onclick="SaveData()">Submit</button>
+            <button type="reset" onclick="Indicate()">Reset</button>
+        </div>
+    </form>
+</body>
+<script>
+    function SaveData(){
+
+        let email,password;
+
+        email = document.getElementById('email').value;
+        password = document.getElementById('password').value;
+        console.log(email);
+        console.log(password);
+        let user_record = new Array();
+        user_record = JSON.parse(localStorage.getItem("users")) ? JSON.parse(localStorage.getItem("users")):[]
+        console.log(user_record)
+
+        if(user_record.some((v) =>{
+            return v.email == email && v.password == password
+        })){
+            alert('Login Successful!');
+
+            // We have session : 
+            let current_user = user_record.filter(v=>{
+                return v.email == email && v.password == password
+            })[0]
+            
+            localStorage.setItem("name",current_user.name);
+            localStorage.setItem("email",current_user.email);
+
+            window.location.href = "profile.html";
+        }else{
+            alert('Login Failed')
+        }
+    }
+</script>
+</html>
